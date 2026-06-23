@@ -7,6 +7,9 @@ on:
       - 'apps/backend/**'
   workflow_dispatch:
 
+env:
+  APPWRITE_ENDPOINT: https://nyc.cloud.appwrite.io/v1
+
 jobs:
   deploy-functions:
     name: Deploy Appwrite Functions
@@ -23,71 +26,28 @@ jobs:
       - name: Install Appwrite CLI
         run: npm install -g appwrite-cli
 
+      - name: Set endpoint
+        run: appwrite client setEndpoint --endpoint ${{ env.APPWRITE_ENDPOINT }}
+
       - name: Login to Appwrite
         run: appwrite login --key ${{ secrets.APPWRITE_API_KEY }}
 
       - name: Deploy video-processor
         run: |
-          appwrite functions update \
-            --functionId video-processor \
-            --runtime node-18 \
-            --entrypoint "src/index.js"
-          appwrite functions createDeployment \
-            --functionId video-processor \
-            --branch main
+          cd apps/backend/functions/video-processor
+          appwrite functions createDeployment --functionId video-processor --branch main --entrypoint "src/index.js"
 
       - name: Deploy subtitle-generator
         run: |
-          appwrite functions update \
-            --functionId subtitle-generator \
-            --runtime node-18 \
-            --entrypoint "src/index.js"
-          appwrite functions createDeployment \
-            --functionId subtitle-generator \
-            --branch main
+          cd apps/backend/functions/subtitle-generator
+          appwrite functions createDeployment --functionId subtitle-generator --branch main --entrypoint "src/index.js"
 
       - name: Deploy ai-orchestrator
         run: |
-          appwrite functions update \
-            --functionId ai-orchestrator \
-            --runtime node-18 \
-            --entrypoint "src/index.js"
-          appwrite functions createDeployment \
-            --functionId ai-orchestrator \
-            --branch main
+          cd apps/backend/functions/ai-orchestrator
+          appwrite functions createDeployment --functionId ai-orchestrator --branch main --entrypoint "src/index.js"
 
       - name: Deploy social-publisher
         run: |
-          appwrite functions update \
-            --functionId social-publisher \
-            --runtime node-18 \
-            --entrypoint "src/index.js"
-          appwrite functions createDeployment \
-            --functionId social-publisher \
-            --branch main
-
-  deploy-database:
-    name: Deploy Appwrite Database
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install Appwrite CLI
-        run: npm install -g appwrite-cli
-
-      - name: Login to Appwrite
-        run: appwrite login --key ${{ secrets.APPWRITE_API_KEY }}
-
-      - name: Push Appwrite Configuration
-        run: |
-          cd apps/backend
-          appwrite init project
-          appwrite push collection --force
-          appwrite push database --force
-          appwrite push bucket --force
+          cd apps/backend/functions/social-publisher
+          appwrite functions createDeployment --functionId social-publisher --branch main --entrypoint "src/index.js"
