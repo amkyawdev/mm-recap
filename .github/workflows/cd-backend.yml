@@ -1,0 +1,93 @@
+name: Deploy Backend (Appwrite)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/backend/**'
+  workflow_dispatch:
+
+jobs:
+  deploy-functions:
+    name: Deploy Appwrite Functions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Appwrite CLI
+        run: npm install -g appwrite-cli
+
+      - name: Login to Appwrite
+        run: appwrite login --key ${{ secrets.APPWRITE_API_KEY }}
+
+      - name: Deploy video-processor
+        run: |
+          appwrite functions update \
+            --functionId video-processor \
+            --runtime node-18 \
+            --entrypoint "src/index.js"
+          appwrite functions createDeployment \
+            --functionId video-processor \
+            --branch main
+
+      - name: Deploy subtitle-generator
+        run: |
+          appwrite functions update \
+            --functionId subtitle-generator \
+            --runtime node-18 \
+            --entrypoint "src/index.js"
+          appwrite functions createDeployment \
+            --functionId subtitle-generator \
+            --branch main
+
+      - name: Deploy ai-orchestrator
+        run: |
+          appwrite functions update \
+            --functionId ai-orchestrator \
+            --runtime node-18 \
+            --entrypoint "src/index.js"
+          appwrite functions createDeployment \
+            --functionId ai-orchestrator \
+            --branch main
+
+      - name: Deploy social-publisher
+        run: |
+          appwrite functions update \
+            --functionId social-publisher \
+            --runtime node-18 \
+            --entrypoint "src/index.js"
+          appwrite functions createDeployment \
+            --functionId social-publisher \
+            --branch main
+
+  deploy-database:
+    name: Deploy Appwrite Database
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Appwrite CLI
+        run: npm install -g appwrite-cli
+
+      - name: Login to Appwrite
+        run: appwrite login --key ${{ secrets.APPWRITE_API_KEY }}
+
+      - name: Push Appwrite Configuration
+        run: |
+          cd apps/backend
+          appwrite init project
+          appwrite push collection --force
+          appwrite push database --force
+          appwrite push bucket --force

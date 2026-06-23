@@ -1,0 +1,118 @@
+{
+  "projectId": "recap-webapp",
+  "name": "AmkyawDev Recap",
+  "description": "Video editing platform backend",
+  "functions": [
+    {
+      "$id": "video-processor",
+      "name": "video-processor",
+      "runtime": "node-18",
+      "path": "functions/video-processor",
+      "entrypoint": "src/index.js",
+      "events": [],
+      "schedule": "",
+      "timeout": 300
+    },
+    {
+      "$id": "subtitle-generator",
+      "name": "subtitle-generator",
+      "runtime": "node-18",
+      "path": "functions/subtitle-generator",
+      "entrypoint": "src/index.js",
+      "events": [],
+      "schedule": "",
+      "timeout": 300
+    },
+    {
+      "$id": "ai-orchestrator",
+      "name": "ai-orchestrator",
+      "runtime": "node-18",
+      "path": "functions/ai-orchestrator",
+      "entrypoint": "src/index.js",
+      "events": [],
+      "schedule": "",
+      "timeout": 600
+    },
+    {
+      "$id": "social-publisher",
+      "name": "social-publisher",
+      "runtime": "node-18",
+      "path": "functions/social-publisher",
+      "entrypoint": "src/index.js",
+      "events": [],
+      "schedule": "",
+      "timeout": 300
+    }
+  ],
+  "databases": [
+    {
+      "$id": "recap",
+      "name": "Recap Database",
+      "collections": [
+        {
+          "$id": "projects",
+          "name": "Projects",
+          "attributes": [
+            { "key": "name", "type": "string", "size": 255, "required": true },
+            { "key": "userId", "type": "string", "size": 255, "required": true },
+            { "key": "status", "type": "string", "size": 50, "required": true },
+            { "key": "thumbnail", "type": "string", "size": 255, "required": false }
+          ]
+        },
+        {
+          "$id": "videos",
+          "name": "Videos",
+          "attributes": [
+            { "key": "projectId", "type": "string", "size": 255, "required": true },
+            { "key": "storageId", "type": "string", "size": 255, "required": true },
+            { "key": "duration", "type": "integer", "required": false },
+            { "key": "type", "type": "string", "size": 50, "required": true }
+          ]
+        },
+        {
+          "$id": "subtitles",
+          "name": "Subtitles",
+          "attributes": [
+            { "key": "videoId", "type": "string", "size": 255, "required": true },
+            { "key": "segments", "type": "string", "size": 10000, "required": true },
+            { "key": "language", "type": "string", "size": 10, "required": true }
+          ]
+        },
+        {
+          "$id": "settings",
+          "name": "User Settings",
+          "attributes": [
+            { "key": "userId", "type": "string", "size": 255, "required": true },
+            { "key": "openaiKey", "type": "string", "size": 255, "required": false },
+            { "key": "geminiKey", "type": "string", "size": 255, "required": false },
+            { "key": "elevenlabsKey", "type": "string", "size": 255, "required": false }
+          ]
+        },
+        {
+          "$id": "publish_history",
+          "name": "Publish History",
+          "attributes": [
+            { "key": "platform", "type": "string", "size": 50, "required": true },
+            { "key": "videoId", "type": "string", "size": 255, "required": true },
+            { "key": "platformVideoId", "type": "string", "size": 255, "required": true },
+            { "key": "url", "type": "string", "size": 255, "required": false }
+          ]
+        }
+      ]
+    }
+  ],
+  "buckets": [
+    {
+      "$id": "videos",
+      "name": "Videos",
+      "permissions": ["read("any")", "write("users")"],
+      "fileSecurity": true
+    },
+    {
+      "$id": "thumbnails",
+      "name": "Thumbnails",
+      "permissions": ["read("any")", "write("users")"],
+      "fileSecurity": true
+    }
+  ]
+}

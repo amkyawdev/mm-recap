@@ -1,0 +1,13 @@
+{
+  "name": "ai-orchestrator",
+  "version": "1.0.0",
+  "description": "AI-powered video editing orchestration",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "node-appwrite": "^11.0.0"
+  }
+}

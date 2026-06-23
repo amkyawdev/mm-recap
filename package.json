@@ -1,0 +1,26 @@
+{
+  "name": "amkyawdev-recap-webapp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Edit, Recap, and Publish - All in One. A powerful video editing suite with AI-powered features.",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "clean": "turbo clean",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "typecheck": "turbo typecheck"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "prettier": "^3.1.0",
+    "turbo": "^1.11.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.10.0"
+}
