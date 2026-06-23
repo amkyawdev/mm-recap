@@ -1,0 +1,460 @@
+# AmkyawDev Recap - UI/UX Design Specification
+
+## 1. Brand Identity
+
+| Element | Value |
+|---------|-------|
+| **Product Name** | AmkyawDev Recap |
+| **Tagline** | "Edit, Recap, and Publish - All in One." |
+| **Brand Personality** | Modern, Creative, Professional, Efficient, Trustworthy |
+| **Target Users** | Content Creators (YouTubers, TikTokers), Video Editors, Marketers |
+| **Primary Value** | Powerful yet easy-to-use video editing suite with AI-powered features |
+
+---
+
+## 2. Color System
+
+### Dark Mode (Default)
+```css
+:root {
+  /* Base Colors */
+  --bg-base: #0B0E14;           /* Main Background - Deep Dark */
+  --bg-surface: #14181F;         /* Content Area Background */
+  --bg-elevated: #1A1F26;        /* Cards, Panels */
+  --bg-hover: #242B35;           /* Hover States */
+  
+  /* Border & Dividers */
+  --border-subtle: #2A2F38;      /* Subtle borders */
+  --border-default: #3A4149;      /* Default borders */
+  
+  /* Accent Colors */
+  --accent-primary: #6C63FF;     /* Main Purple - Creativity */
+  --accent-secondary: #FF6B6B;    /* Coral - Energy */
+  --accent-gradient: linear-gradient(135deg, #6C63FF 0%, #00D9FF 100%);
+  
+  /* Text Colors */
+  --text-primary: #FFFFFF;       /* Primary text */
+  --text-secondary: #A0A0A0;     /* Secondary text */
+  --text-muted: #6B7280;         /* Muted/disabled text */
+  
+  /* Semantic Colors */
+  --success: #10B981;            /* Success states */
+  --warning: #F59E0B;            /* Warning states */
+  --error: #EF4444;              /* Error states */
+  --info: #3B82F6;               /* Info states */
+}
+```
+
+### Light Mode
+```css
+[data-theme="light"] {
+  --bg-base: #F8FAFC;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #F1F5F9;
+  --bg-hover: #E2E8F0;
+  --border-subtle: #E2E8F0;
+  --border-default: #CBD5E1;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+}
+```
+
+---
+
+## 3. Typography
+
+### Font Stack
+- **Display/Headings**: "Plus Jakarta Sans" (Bold, SemiBold)
+- **Body**: "Inter" (Regular, Medium)
+- **Monospace**: "JetBrains Mono" (for code/timestamps)
+
+### Font Scale
+| Element | Font | Size | Weight | Line Height |
+|---------|------|------|--------|-------------|
+| H1 (Page Title) | Plus Jakarta Sans | 32px | 700 | 1.2 |
+| H2 (Section Header) | Plus Jakarta Sans | 24px | 600 | 1.3 |
+| H3 (Card Title) | Inter | 18px | 500 | 1.4 |
+| Body | Inter | 14px | 400 | 1.5 |
+| Small/Label | Inter | 12px | 400 | 1.4 |
+| Caption | Inter | 11px | 500 | 1.3 |
+
+---
+
+## 4. Layout System
+
+### Shell Layout
+```
+┌─────────────────────────────────────────────────────────┐
+│ [SIDEBAR]  │  [TOP BAR]                                │
+│ 240px      │                                           │
+│            │  Breadcrumb          User Menu             │
+│ ┌────────┐ ├────────────────────────────────────────────┤
+│ │ Logo   │ │                                            │
+│ ├────────┤ │         MAIN CONTENT AREA                   │
+│ │ Nav    │ │         (24px padding)                     │
+│ │ Items  │ │         bg: var(--bg-surface)              │
+│ │        │ │                                            │
+│ │        │ │                                            │
+│ ├────────┤ │                                            │
+│ │ Bottom │ │                                            │
+│ │ Items  │ │                                            │
+│ └────────┘ │                                            │
+└───────────┴────────────────────────────────────────────┘
+```
+
+### Sidebar Specs
+- **Width Expanded**: 240px
+- **Width Collapsed**: 72px
+- **Background**: var(--bg-base)
+- **Border Right**: 1px solid var(--border-subtle)
+
+### Top Bar Specs
+- **Height**: 64px
+- **Background**: var(--bg-base)
+- **Border Bottom**: 1px solid var(--border-subtle)
+
+### Content Area
+- **Background**: var(--bg-surface)
+- **Padding**: 24px
+- **Border Radius**: 12px (cards)
+
+---
+
+## 5. Component Specifications
+
+### 5.1 Button Component
+
+| Variant | Default | Hover | Active | Disabled |
+|---------|--------|-------|--------|----------|
+| Primary | bg: var(--accent-primary), text: white | bg: #5B52E8, shadow: 0 4px 12px rgba(108,99,255,0.3) | bg: #4A43D6, scale: 0.98 | opacity: 0.5, cursor: not-allowed |
+| Secondary | bg: transparent, border: var(--border-default), text: var(--text-primary) | bg: var(--bg-hover), border: var(--accent-primary) | bg: var(--bg-elevated), scale: 0.98 | opacity: 0.5 |
+| Ghost | bg: transparent, text: var(--text-secondary) | bg: var(--bg-hover), text: var(--text-primary) | bg: var(--bg-elevated) | opacity: 0.5 |
+
+**Sizes**: `sm` (32px), `md` (40px), `lg` (48px)
+
+### 5.2 Card Component
+
+```css
+.card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--border-default);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Glassmorphism Variant */
+.card-glass {
+  background: rgba(26, 31, 38, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+```
+
+### 5.3 Input Component
+
+```css
+.input {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+```
+
+### 5.4 Modal Component
+
+```css
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 500px;
+  width: 90%;
+  animation: modal-enter 0.3s ease;
+}
+
+@keyframes modal-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+```
+
+### 5.5 Badge Component
+
+| Status | Color | Use Case |
+|--------|-------|----------|
+| Processing | var(--info) - Blue | Video processing in progress |
+| Completed | var(--success) - Green | Task completed successfully |
+| Failed | var(--error) - Red | Task failed |
+| Draft | var(--text-muted) - Gray | Draft/inactive state |
+| Premium | var(--accent-gradient) | Premium features |
+
+---
+
+## 6. Page Layouts
+
+### 6.1 Dashboard Layout
+```
+┌────────────────────────────────────────────────────────┐
+│ Quick Actions                              [New Project]│
+├────────────────────────────────────────────────────────┤
+│ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐    │
+│ │ Recent #1    │ │ Recent #2    │ │ Recent #3    │    │
+│ │ Thumbnail    │ │ Thumbnail    │ │ Thumbnail    │    │
+│ │ Title        │ │ Title        │ │ Title        │    │
+│ │ Status       │ │ Status       │ │ Status       │    │
+│ └──────────────┘ └──────────────┘ └──────────────┘    │
+├────────────────────────────────────────────────────────┤
+│ ┌─────────────────────┐  ┌───────────────────────────┐│
+│ │ Storage Usage       │  │ Activity Feed            ││
+│ │ Circular Progress   │  │ - Action 1               ││
+│ │ 45.2 GB / 100 GB    │  │ - Action 2               ││
+│ └─────────────────────┘  └───────────────────────────┘│
+└────────────────────────────────────────────────────────┘
+```
+
+### 6.2 Video Editor Layout
+```
+┌──────────────────────────────────────────────────────────────────┐
+│ [Library  ]│                    [Preview]                │Props │
+│  240px      │                    Video Player             │ 320px│
+│             │                                              │      │
+│ ┌─────────┐ │  ┌─────────────────────────────────────┐  │ Trim │
+│ │ Videos  │ │  │                                     │  │ Dur  │
+│ │ ─────── │ │  │                                     │  │ Vol  │
+│ │ 📹 vid1 │ │  │           VIDEO CONTENT             │  │ Speed│
+│ │ 📹 vid2 │ │  │                                     │  │      │
+│ ├─────────┤ │  └─────────────────────────────────────┘  │      │
+│ │ Audio   │ │  ▶ ━━━━━━━━━○━━━━━━ 10:24 / 15:00        │      │
+│ │ ─────── │ │                                              │      │
+│ ├─────────┤ │                                              │      │
+│ │ Text    │ ├──────────────────────────────────────────────┤
+│ └─────────┘ │ [Timeline - Multi Track]                    │
+└─────────────┴───────────────────────────────────────────────────-┘
+```
+
+### 6.3 Subtitle Editor Layout
+```
+┌──────────────────────────────────────────────────────────────────┐
+│ [Video Preview]                           │ [Subtitle Track]      │
+│ ┌─────────────────────────────────────┐  │                       │
+│ │                                     │  │ [+ Auto-Generate]     │
+│ │           VIDEO PLAYER              │  │ [+ Add Subtitle]      │
+│ │                                     │  │                       │
+│ │     [Subtitle overlaid here]        │  │ ┌─────────────────┐   │
+│ │                                     │  │ │ 00:00 → 00:05   │   │
+│ └─────────────────────────────────────┘  │ │ "Hello world"   │   │
+│ ▶ ━━━━━○━━━━━━━━━━━━━━━━━  02:30        │ ├─────────────────┤   │
+│                                          │ │ 00:05 → 00:10   │   │
+│                                          │ │ "Welcome to..." │   │
+│                                          │ └─────────────────┘   │
+│                                          │                       │
+│                                          │ [Export SRT]           │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+### 6.4 AI Studio Layout (Wizard)
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                    AI Auto-Edit Studio                           │
+│                                                                  │
+│  ┌─────────────────────────────────────────────────────────────┐ │
+│  │  ① Select Source  │  ② Choose Template  │  ③ Customize    │ │
+│  └─────────────────────────────────────────────────────────────┘ │
+│                                                                  │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │                                                           │  │
+│  │     ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐  │  │
+│  │     │  Vlog   │  │Cinema-  │  │Cooking  │  │  Tech   │  │  │
+│  │     │         │  │tic      │  │         │  │ Review   │  │  │
+│  │     │  Icon   │  │         │  │         │  │          │  │  │
+│  │     └─────────┘  └─────────┘  └─────────┘  └─────────┘  │  │
+│  │                                                           │  │
+│  └───────────────────────────────────────────────────────────┘  │
+│                                                                  │
+│                              [Generate with AI]                  │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+### 6.5 Publish Dashboard Layout
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                      Publish to Social                           │
+│                                                                  │
+│  ┌─────────────────────────────────────────────────────────────┐ │
+│  │  ① Select Video  │  ② Platforms  │  ③ Meta-Data  │  ④ Done│ │
+│  └─────────────────────────────────────────────────────────────┘ │
+│                                                                  │
+│  ┌─────────────────────┐  ┌─────────────────────────────────┐   │
+│  │ YouTube     [✓]     │  │ Title: ___________________      │   │
+│  │ TikTok       [ ]    │  │                                 │   │
+│  │                     │  │ Description:                   │   │
+│  │ ───────────────────  │  │ ┌─────────────────────────────┐ │   │
+│  │ Connect Account →   │  │ │                             │ │   │
+│  │                      │  │ └─────────────────────────────┘ │   │
+│  └─────────────────────┘  │                                 │   │
+│                            │ Tags: __________________        │   │
+│                            │                                 │   │
+│                            │ Thumbnail: [Upload/AI Generate] │   │
+│                            └─────────────────────────────────┘   │
+│                                                                  │
+│                          [Schedule] [Publish Now]               │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+### 6.6 Settings Layout (Tabs)
+```
+┌──────────────────────────────────────────────────────────────────┐
+│                         Settings                                 │
+│                                                                  │
+│  ┌──────────┬──────────────┬─────────────┐                     │
+│  │ Profile  │   API Keys   │ Subscription│                     │
+│  └──────────┴──────────────┴─────────────┘                     │
+│  ────────────────────────────────────────────────────────────── │
+│                                                                  │
+│  API Keys                                                        │
+│  ══════════════════════════════════════════════════════════════ │
+│                                                                  │
+│  ┌───────────────────────────────────────────────────────────┐   │
+│  │ OpenAI API Key                                            │   │
+│  │ ┌─────────────────────────────────────────────────────┐   │   │
+│  │ │ ••••••••••••••••••••••••••••••••••••••••••        │   │   │
+│  │ └─────────────────────────────────────────────────────┘   │   │
+│  │                                            [Save] [Show]  │   │
+│  └───────────────────────────────────────────────────────────┘   │
+│                                                                  │
+│  ┌───────────────────────────────────────────────────────────┐   │
+│  │ Gemini API Key                                            │   │
+│  │ ┌─────────────────────────────────────────────────────┐   │   │
+│  │ │ ••••••••••••••••••••••••••••••••••••••••••        │   │   │
+│  │ └─────────────────────────────────────────────────────┘   │   │
+│  │                                            [Save] [Show]  │   │
+│  └───────────────────────────────────────────────────────────┘   │
+│                                                                  │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 7. Animations & Transitions
+
+| Element | Animation | Duration | Easing |
+|---------|-----------|----------|--------|
+| Page Load | Staggered fade-in | 400ms | ease-out |
+| Button Hover | Scale 1.02, shadow | 150ms | ease |
+| Card Hover | Y-translate -2px, shadow | 200ms | ease |
+| Sidebar Toggle | Width transition | 300ms | cubic-bezier(0.4, 0, 0.2, 1) |
+| Modal Enter | Scale 0.95→1, fade | 300ms | ease-out |
+| Modal Exit | Scale 1→0.95, fade | 200ms | ease-in |
+| Skeleton Pulse | Opacity 0.5→1 | 1.5s | ease-in-out (infinite) |
+
+---
+
+## 8. Icon System
+
+**Library**: Lucide React
+
+**Sizing**:
+- Sidebar Icons: 20px
+- Button Icons: 18px
+- Inline Icons: 16px
+- Badge Icons: 12px
+
+**Style**: Outlined by default, filled on active/hover
+
+**Key Icons**:
+| Page | Icon |
+|------|------|
+| Dashboard | LayoutDashboard |
+| Editor | Film |
+| Subtitle | Subtitles |
+| AI Studio | Sparkles |
+| Publish | Upload |
+| Settings | Settings |
+| Dark Mode | Moon |
+| Light Mode | Sun |
+
+---
+
+## 9. Responsive Breakpoints
+
+| Breakpoint | Width | Layout Changes |
+|------------|-------|----------------|
+| Desktop | ≥1280px | Full sidebar (240px) |
+| Laptop | 1024px-1279px | Full sidebar (240px) |
+| Tablet | 768px-1023px | Collapsed sidebar (72px) |
+| Mobile | <768px | Hidden sidebar, bottom nav |
+
+---
+
+## 10. PWA Configuration
+
+```json
+{
+  "name": "AmkyawDev Recap",
+  "short_name": "Recap",
+  "description": "Edit, Recap, and Publish - All in One.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0E14",
+  "theme_color": "#6C63FF",
+  "icons": [
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
+```
+
+---
+
+## 11. Accessibility
+
+- **Focus States**: 2px solid var(--accent-primary) with 2px offset
+- **Contrast Ratios**: Minimum 4.5:1 for text, 3:1 for UI elements
+- **Screen Reader**: ARIA labels on all interactive elements
+- **Keyboard Navigation**: Full tab navigation support
+- **Reduced Motion**: Respect `prefers-reduced-motion` media query

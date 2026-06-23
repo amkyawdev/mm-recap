@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>amkyawdev-recap-webapp | Project Structure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-green: #22c55e;
+            --accent-orange: #f97316;
+            --accent-pink: #ec4899;
+            --border: #334155;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        .slide {
+            min-height: 100vh;
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid var(--border);
+        }
+        .slide-header {
+            margin-bottom: 40px;
+        }
+        .slide-number {
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            color: var(--accent-blue);
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        h2 {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--accent-blue);
+        }
+        h3 {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--accent-purple);
+            margin: 20px 0 10px;
+        }
+        .mono { font-family: 'Fira Code', monospace; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            flex: 1;
+        }
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.15);
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card-icon {
+            font-size: 24px;
+        }
+        .card-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        .tree {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+        .tree .dir { color: var(--accent-blue); }
+        .tree .file { color: var(--text-primary); }
+        .tree .comment { color: var(--accent-green); }
+        .tree .highlight { color: var(--accent-purple); }
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin: 2px;
+        }
+        .tag-blue { background: rgba(59, 130, 246, 0.2); color: var(--accent-blue); }
+        .tag-purple { background: rgba(139, 92, 246, 0.2); color: var(--accent-purple); }
+        .tag-green { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
+        .tag-orange { background: rgba(249, 115, 22, 0.2); color: var(--accent-orange); }
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            flex: 1;
+        }
+        .list {
+            list-style: none;
+        }
+        .list li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .list li:last-child { border-bottom: none; }
+        .list-icon { color: var(--accent-blue); font-size: 18px; flex-shrink: 0; }
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+            border-left: 4px solid var(--accent-purple);
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            margin: 15px 0;
+        }
+        .toc {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .toc-item {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+        .toc-item:hover {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        .toc-num {
+            font-family: 'Fira Code', monospace;
+            color: var(--accent-blue);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .toc-title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .flex-1 { flex: 1; }
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 20px;
+            margin-top: 10px;
+        }
+        .slide-cover {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+        }
+        .slide-cover h1 { font-size: 64px; margin-bottom: 20px; }
+        .slide-cover .subtitle { font-size: 24px; margin-bottom: 40px; }
+        .workflow-box {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            margin: 15px 0;
+        }
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px 0;
+        }
+        .step-num {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .step-content h4 { font-size: 18px; margin-bottom: 5px; }
+        .step-content p { color: var(--text-secondary); font-size: 14px; }
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .file-item {
+            background: var(--bg-card);
+            padding: 15px 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-path { color: var(--text-primary); }
+        .file-size { color: var(--text-secondary); font-size: 12px; }
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-top: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Cover -->
+<div class="slide slide-cover">
+    <div class="slide-number">amkyawdev-recap-webapp</div>
+    <h1>Project Architecture</h1>
+    <p class="subtitle">Monorepo Structure, Tech Stack & Design Patterns</p>
+    <div style="margin-top: 40px;">
+        <span class="tag tag-blue">Next.js 14</span>
+        <span class="tag tag-purple">Appwrite</span>
+        <span class="tag tag-green">TypeScript</span>
+        <span class="tag tag-orange">Turborepo</span>
+    </div>
+</div>
+
+<!-- Slide 2: Table of Contents -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">Overview</div>
+        <h1>Contents</h1>
+    </div>
+    <div class="toc">
+        <a href="#structure" class="toc-item">
+            <div class="toc-num">01</div>
+            <div class="toc-title">Directory Structure</div>
+        </a>
+        <a href="#apps" class="toc-item">
+            <div class="toc-num">02</div>
+            <div class="toc-title">Applications</div>
+        </a>
+        <a href="#packages" class="toc-item">
+            <div class="toc-num">03</div>
+            <div class="toc-title">Shared Packages</div>
+        </a>
+        <a href="#workflows" class="toc-item">
+            <div class="toc-num">04</div>
+            <div class="toc-title">CI/CD Pipeline</div>
+        </a>
+        <a href="#tech" class="toc-item">
+            <div class="toc-num">05</div>
+            <div class="toc-title">Tech Stack</div>
+        </a>
+        <a href="#data" class="toc-item">
+            <div class="toc-num">06</div>
+            <div class="toc-title">Data Flow</div>
+        </a>
+    </div>
+</div>
+
+<!-- Slide 3: Directory Structure -->
+<div class="slide" id="structure">
+    <div class="slide-header">
+        <div class="slide-number">01 / Structure</div>
+        <h2>Monorepo Directory Structure</h2>
+    </div>
+    <pre class="tree">
+amkyawdev-recap-webapp/                   <span class="comment"># Monorepo Root</span>
+├── <span class="dir">.github/</span>                              <span class="comment"># GitHub Actions</span>
+│   ├── <span class="dir">workflows/</span>
+│   │   ├── ci.yml                        <span class="comment"># Lint, Test, Build</span>
+│   │   ├── cd-frontend.yml               <span class="comment"># Deploy → Vercel</span>
+│   │   └── cd-backend.yml                <span class="comment"># Deploy → Appwrite</span>
+│   └── dependabot.yml                    <span class="comment"># Auto dependency updates</span>
+│
+├── <span class="dir">apps/</span>                                 <span class="comment"># 📱 Main Applications</span>
+│   ├── <span class="dir">web/</span>                              <span class="comment"># Next.js Frontend</span>
+│   └── <span class="dir">backend/</span>                          <span class="comment"># Appwrite Functions</span>
+│
+├── <span class="dir">packages/</span>                             <span class="comment"># 📦 Shared Libraries</span>
+│   ├── <span class="dir">ui/</span>                               <span class="comment"># Shared UI Components</span>
+│   ├── <span class="dir">types/</span>                            <span class="comment"># TypeScript Types</span>
+│   ├── <span class="dir">utils/</span>                            <span class="comment"># Utilities</span>
+│   └── <span class="dir">config/</span>                           <span class="comment"># ESLint, TS, Tailwind</span>
+│
+├── <span class="dir">tooling/</span>                              <span class="comment"># 🛠 Dev Tools</span>
+│
+├── <span class="highlight">pnpm-workspace.yaml</span>                   <span class="comment"># pnpm workspace config</span>
+└── <span class="highlight">turbo.json</span>                            <span class="comment"># Turborepo pipeline</span>
+    </pre>
+</div>
+
+<!-- Slide 4: Apps - Frontend -->
+<div class="slide" id="apps">
+    <div class="slide-header">
+        <div class="slide-number">02 / Applications</div>
+        <h2>Frontend: Next.js App Router</h2>
+    </div>
+    <div class="two-col">
+        <div>
+            <h3>App Router Structure</h3>
+            <pre class="tree">
+<span class="dir">apps/web/src/app/</span>
+├── <span class="dir">(auth)/</span>                   <span class="comment"># Auth routes</span>
+│   ├── login/
+│   └── register/
+├── <span class="dir">(dashboard)/</span>              <span class="comment"># Protected routes</span>
+│   ├── dashboard/           <span class="comment"># Overview</span>
+│   ├── editor/             <span class="comment"># Video Editor</span>
+│   ├── subtitle/           <span class="comment"># Subtitle Editor</span>
+│   ├── ai-studio/          <span class="comment"># AI Auto-edit</span>
+│   ├── publish/            <span class="comment"># Social Upload</span>
+│   └── settings/           <span class="comment"># API Keys</span>
+├── <span class="dir">api/</span>                     <span class="comment"># BFF Routes</span>
+│   ├── ai/                 <span class="comment"># OpenAI, Gemini, TTS</span>
+│   └── webhooks/           <span class="comment"># Appwrite webhooks</span>
+└── <span class="dir">layout.jsx</span>
+            </pre>
+        </div>
+        <div>
+            <h3>Core Libraries</h3>
+            <div class="card" style="margin-bottom: 15px;">
+                <div class="card-title"><span class="card-icon">📦</span> appwrite/</div>
+                <div class="card-desc">SDK wrappers for client, auth, databases</div>
+            </div>
+            <div class="card" style="margin-bottom: 15px;">
+                <div class="card-title"><span class="card-icon">🤖</span> ai/</div>
+                <div class="card-desc">AI service wrappers (OpenAI, Gemini, ElevenLabs)</div>
+            </div>
+            <div class="card" style="margin-bottom: 15px;">
+                <div class="card-title"><span class="card-icon">🎣</span> hooks/</div>
+                <div class="card-desc">useAuth, useVideoProcessor, useApiKey</div>
+            </div>
+            <div class="card">
+                <div class="card-title"><span class="card-icon">🗂️</span> store/</div>
+                <div class="card-desc">Zustand/Redux state management</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 5: Apps - Backend -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">02 / Applications</div>
+        <h2>Backend: Appwrite Functions (Microservices)</h2>
+    </div>
+    <div class="grid">
+        <div class="card">
+            <div class="card-title"><span class="card-icon">🎬</span> video-processor/</div>
+            <div class="card-desc">FFmpeg-based video editing. Handles trimming, merging, effects, transcoding.</div>
+            <div style="margin-top: 15px;">
+                <span class="tag tag-blue">ffmpeg</span>
+                <span class="tag tag-purple">storage</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="card-icon">📝</span> subtitle-generator/</div>
+            <div class="card-desc">STT + SRT processing. Uses Whisper for transcription.</div>
+            <div style="margin-top: 15px;">
+                <span class="tag tag-blue">whisper</span>
+                <span class="tag tag-green">srt-parser</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="card-icon">✨</span> ai-orchestrator/</div>
+            <div class="card-desc">AI auto-edit logic. Coordinates OpenAI & Gemini for smart editing.</div>
+            <div style="margin-top: 15px;">
+                <span class="tag tag-orange">openai</span>
+                <span class="tag tag-purple">gemini</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="card-icon">📤</span> social-publisher/</div>
+            <div class="card-desc">YouTube & TikTok upload. OAuth integration, thumbnail & metadata.</div>
+            <div style="margin-top: 15px;">
+                <span class="tag tag-blue">youtube</span>
+                <span class="tag tag-pink">tiktok</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 6: Shared Packages -->
+<div class="slide" id="packages">
+    <div class="slide-header">
+        <div class="slide-number">03 / Packages</div>
+        <h2>Shared Packages (packages/)</h2>
+    </div>
+    <div class="grid">
+        <div class="card">
+            <div class="card-title"><span class="card-icon">🎨</span> ui/</div>
+            <div class="card-desc">Shared UI component library. Built with ShadCN/ui. Includes Button, Dialog, Dropdown, etc.</div>
+            <pre class="tree" style="margin-top: 15px;">
+├── components/
+│   ├── ui/
+│   │   ├── Button.tsx
+│   │   ├── Dialog.tsx
+│   │   └── ...
+└── index.tsx</pre>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="card-icon">📐</span> types/</div>
+            <div class="card-desc">Centralized TypeScript types for type safety across apps.</div>
+            <pre class="tree" style="margin-top: 15px;">
+├── api/           <span class="comment"># API request/response types</span>
+├── video/         <span class="comment"># Video editing types</span>
+├── user/          <span class="comment"># User & auth types</span>
+└── index.ts</pre>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="card-icon">🔧</span> utils/</div>
+            <div class="card-desc">Shared utilities: validators, formatters, helpers.</div>
+            <pre class="tree" style="margin-top: 15px;">
+├── validators/    <span class="comment"># Input validation</span>
+├── formatters/    <span class="comment"># Date, number, etc.</span>
+└── index.ts</pre>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="card-icon">⚙️</span> config/</div>
+            <div class="card-desc">Shared configuration: ESLint, TypeScript, Tailwind presets.</div>
+            <pre class="tree" style="margin-top: 15px;">
+├── eslint/
+├── typescript/
+└── tailwind/</pre>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 7: CI/CD Pipeline -->
+<div class="slide" id="workflows">
+    <div class="slide-header">
+        <div class="slide-number">04 / CI/CD</div>
+        <h2>GitHub Actions Pipeline</h2>
+    </div>
+    <div class="two-col">
+        <div>
+            <div class="workflow-box">
+                <h3 style="margin-top: 0;">ci.yml — Continuous Integration</h3>
+                <div class="workflow-step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h4>Install & Cache</h4>
+                        <p>pnpm install with dependency caching</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h4>Type Check</h4>
+                        <p>tsc --noEmit across workspace</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h4>Test</h4>
+                        <p>Run test suites with coverage</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <h4>Build</h4>
+                        <p>Turborepo build pipeline</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="workflow-box">
+                <h3 style="margin-top: 0;">cd-frontend.yml — Vercel Deploy</h3>
+                <div class="workflow-step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h4>Build App</h4>
+                        <p>Build Next.js app with Turborepo</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h4>Deploy</h4>
+                        <p>Push to Vercel production/preview</p>
+                    </div>
+                </div>
+            </div>
+            <div class="workflow-box">
+                <h3 style="margin-top: 20px;">cd-backend.yml — Appwrite Deploy</h3>
+                <div class="workflow-step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h4>Deploy Functions</h4>
+                        <p>Deploy all Appwrite functions</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 8: Tech Stack -->
+<div class="slide" id="tech">
+    <div class="slide-header">
+        <div class="slide-number">05 / Tech Stack</div>
+        <h2>Technology Stack</h2>
+    </div>
+    <div class="grid">
+        <div class="card">
+            <div class="card-title"><span class="card-icon">⚡</span> Frontend</div>
+            <ul class="list">
+                <li><span class="list-icon">▸</span> <strong>Next.js 14</strong> — App Router, Server Components</li>
+                <li><span class="list-icon">▸</span> <strong>TypeScript</strong> — Full type safety</li>
+                <li><span class="list-icon">▸</span> <strong>Tailwind CSS</strong> — Utility-first styling</li>
+                <li><span class="list-icon">▸</span> <strong>ShadCN/ui</strong> — Accessible components</li>
+                <li><span class="list-icon">▸</span> <strong>Zustand/Redux</strong> — State management</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="card-icon">🗄️</span> Backend</div>
+            <ul class="list">
+                <li><span class="list-icon">▸</span> <strong>Appwrite</strong> — BaaS (Auth, DB, Storage, Functions)</li>
+                <li><span class="list-icon">▸</span> <strong>Node.js</strong> — Function runtime</li>
+                <li><span class="list-icon">▸</span> <strong>FFmpeg</strong> — Video processing</li>
+                <li><span class="list-icon">▸</span> <strong>Redis</strong> — Caching (via docker-compose)</li>
+                <li><span class="list-icon">▸</span> <strong>MinIO</strong> — S3-compatible storage (local dev)</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="card-icon">🤖</span> AI/ML</div>
+            <ul class="list">
+                <li><span class="list-icon">▸</span> <strong>OpenAI API</strong> — GPT-4 for auto-editing</li>
+                <li><span class="list-icon">▸</span> <strong>Gemini</strong> — Alternative AI model</li>
+                <li><span class="list-icon">▸</span> <strong>Whisper</strong> — Speech-to-text</li>
+                <li><span class="list-icon">▸</span> <strong>ElevenLabs</strong> — Text-to-speech</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="card-icon">🛠️</span> DevOps</div>
+            <ul class="list">
+                <li><span class="list-icon">▸</span> <strong>Turborepo</strong> — Build orchestration</li>
+                <li><span class="list-icon">▸</span> <strong>pnpm</strong> — Package manager</li>
+                <li><span class="list-icon">▸</span> <strong>Vercel</strong> — Frontend hosting</li>
+                <li><span class="list-icon">▸</span> <strong>GitHub Actions</strong> — CI/CD</li>
+                <li><span class="list-icon">▸</span> <strong>Dependabot</strong> — Auto updates</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 9: Data Flow -->
+<div class="slide" id="data">
+    <div class="slide-header">
+        <div class="slide-number">06 / Data Flow</div>
+        <h2>Architecture & Data Flow</h2>
+    </div>
+    <div class="two-col">
+        <div>
+            <h3>User Actions Flow</h3>
+            <pre class="tree">
+<span class="highlight">1. Upload Video</span>
+User → Next.js → Appwrite Storage
+                    ↓
+            <span class="highlight">2. Process Video</span>
+            video-processor (FFmpeg)
+                    ↓
+            <span class="highlight">3. Generate Subtitles</span>
+            subtitle-generator (Whisper)
+                    ↓
+            <span class="highlight">4. AI Auto-Edit</span>
+            ai-orchestrator (GPT-4/Gemini)
+                    ↓
+            <span class="highlight">5. Publish</span>
+            social-publisher (YouTube/TikTok)
+            </pre>
+        </div>
+        <div>
+            <h3>API Architecture</h3>
+            <div class="highlight-box">
+                <p><strong>BFF Pattern</strong> — Next.js API Routes act as Backend-for-Frontend, providing:</p>
+                <ul style="margin-top: 10px; margin-left: 20px; color: var(--text-secondary);">
+                    <li>API key protection (not exposed to client)</li>
+                    <li>Request/response transformation</li>
+                    <li>Caching layer</li>
+                    <li>Rate limiting</li>
+                </ul>
+            </div>
+            <h3 style="margin-top: 30px;">Authentication</h3>
+            <ul class="list">
+                <li><span class="list-icon">✓</span> Appwrite Auth for user management</li>
+                <li><span class="list-icon">✓</span> API Keys stored in user settings</li>
+                <li><span class="list-icon">✓</span> OAuth flows for YouTube/TikTok</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 10: Key Features -->
+<div class="slide">
+    <div class="slide-header">
+        <div class="slide-number">Features</div>
+        <h2>Key Features</h2>
+    </div>
+    <div class="grid">
+        <div class="card">
+            <div class="card-title"><span class="card-icon">🎞️</span> Video Editor</div>
+            <div class="card-desc">Full-featured timeline, preview, controls. Support for trimming, transitions, effects.</div>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="card-icon">💬</span> Subtitle Editor</div>
+            <div class="card-desc">Automatic transcription with Whisper. SRT/VTT export with styling options.</div>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="card-icon">🧠</span> AI Studio</div>
+            <div class="card-desc">Template-based auto-editing. Smart cut suggestions, pacing, transitions.</div>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="card-icon">🚀</span> One-Click Publish</div>
+            <div class="card-desc">Direct upload to YouTube & TikTok with auto-generated thumbnails & metadata.</div>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="card-icon">🔒</span> Secure API Keys</div>
+            <div class="card-desc">User-managed API keys for OpenAI, Gemini, ElevenLabs stored securely.</div>
+        </div>
+        <div class="card">
+            <div class="card-title"><span class="card-icon">📱</span> PWA Support</div>
+            <div class="card-desc">Installable as app with offline capabilities. Icons & manifest configured.</div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 11: Summary -->
+<div class="slide slide-cover">
+    <div class="slide-number">Summary</div>
+    <h1>Modern Video Editing Platform</h1>
+    <p class="subtitle">Scalable monorepo with AI-powered automation</p>
+    <div class="grid" style="max-width: 800px; margin-top: 50px; text-align: left;">
+        <div style="background: var(--bg-card); padding: 20px; border-radius: 10px;">
+            <h3 style="color: var(--accent-blue);">Scalable Architecture</h3>
+            <p style="color: var(--text-secondary);">Turborepo + pnpm workspaces for efficient builds</p>
+        </div>
+        <div style="background: var(--bg-card); padding: 20px; border-radius: 10px;">
+            <h3 style="color: var(--accent-purple);">AI-Powered</h3>
+            <p style="color: var(--text-secondary);">Auto-editing, transcription, TTS integration</p>
+        </div>
+        <div style="background: var(--bg-card); padding: 20px; border-radius: 10px;">
+            <h3 style="color: var(--accent-green);">Cloud-Native</h3>
+            <p style="color: var(--text-secondary);">Vercel + Appwrite Functions deployment</p>
+        </div>
+        <div style="background: var(--bg-card); padding: 20px; border-radius: 10px;">
+            <h3 style="color: var(--accent-orange);">Developer Experience</h3>
+            <p style="color: var(--text-secondary);">TypeScript, CI/CD, Dependabot updates</p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    amkyawdev-recap-webapp • Monorepo Architecture Overview
+</footer>
+
+</body>
+</html>
